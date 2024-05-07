@@ -8,6 +8,7 @@ public class SortOrder {
     Scope first;
     Scope then;
 
+    public SortOrder() { }
     public SortOrder(Scope first, Scope then) {
         this.first = first;
         this.then = then;
@@ -19,6 +20,16 @@ public class SortOrder {
 
     public Scope getThen() {
         return then;
+    }
+
+    public SortOrder setFirst(Scope first) {
+        this.first = first;
+        return this;
+    }
+
+    public SortOrder setThen(Scope then) {
+        this.then = then;
+        return this;
     }
 
     @Override
