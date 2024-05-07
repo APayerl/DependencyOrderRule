@@ -4,6 +4,7 @@ import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugins.annotations.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Named("DependencyOrderRule")
 public class DependencyOrderRule extends AbstractEnforcerRule {
-    @Inject
+    @Component
     private MavenProject project;
 
     private List<SortOrder> SortOrders;
