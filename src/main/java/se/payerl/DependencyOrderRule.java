@@ -1,11 +1,13 @@
 package se.payerl;
 
+import jakarta.inject.Inject;
 import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugins.annotations.Component;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,10 @@ import java.util.stream.Collectors;
 
 @Named("DependencyOrderRule")
 public class DependencyOrderRule extends AbstractEnforcerRule {
+    @Component
     @Inject
+    @javax.inject.Inject
+    @Parameter
     private MavenProject project;
 
     private List<SortOrder> SortOrders;
