@@ -13,4 +13,13 @@ public enum Scope {
     Scope(String value) {
         this.value = value;
     }
+
+    public static Scope fromString(String value) {
+        for (Scope scope : Scope.values()) {
+            if (scope.value.equalsIgnoreCase(value)) {
+                return scope;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant " + Scope.class.getCanonicalName() + "." + value);
+    }
 }
