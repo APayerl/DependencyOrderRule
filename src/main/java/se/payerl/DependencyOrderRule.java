@@ -1,6 +1,5 @@
 package se.payerl;
 
-import jakarta.inject.Inject;
 import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @Named("DependencyOrderRule")
 public class DependencyOrderRule extends AbstractEnforcerRule {
     @Component
-    @Inject
+    @jakarta.inject.Inject
     @javax.inject.Inject
     @Parameter
     private MavenProject project;
