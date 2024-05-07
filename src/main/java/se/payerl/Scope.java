@@ -1,4 +1,4 @@
-package se.payerl.dependencyorderrule;
+package se.payerl;
 
 public enum Scope {
     TEST("test"),

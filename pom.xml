@@ -11,8 +11,8 @@
     <properties>
         <api.version>3.4.1</api.version>
         <mavenVersion>3.2.5</mavenVersion>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

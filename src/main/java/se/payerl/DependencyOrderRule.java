@@ -1,4 +1,4 @@
-package se.payerl.dependencyorderrule;
+package se.payerl;
 
 import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -25,17 +25,17 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
         if(dependencies.size() > 1) {
             SortOrders.forEach(sortOrder -> {
-                getLog().info("Checking for " + sortOrder.getFirst() + " before " + sortOrder.getSecond());
+                getLog().info("Checking for " + sortOrder.getFirst() + " before " + sortOrder.getThen());
                 List<Dependency> listOfDeps = dependencies.stream()
                         .filter(dep ->
                                 dep.getScope().equalsIgnoreCase(sortOrder.getFirst().value) ||
-                                dep.getScope().equalsIgnoreCase(sortOrder.getSecond().value))
-                        .toList();
+                                dep.getScope().equalsIgnoreCase(sortOrder.getThen().value))
+                        .collect(Collectors.toList());
                 for(int i = 1; i < listOfDeps.size(); i++) {
                     Dependency prevDep = listOfDeps.get(i-1);
                     Dependency currentDep = listOfDeps.get(i);
 
-                    if(prevDep.getScope().equalsIgnoreCase(sortOrder.getSecond().value) &&
+                    if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen().value) &&
                             currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst().value)) {
                         exceptions.add(new EnforcerRuleException("Dependency " + prevDep.getGroupId() + ":" + prevDep.getArtifactId() + " must be before " + currentDep.getGroupId() + ":" + currentDep.getArtifactId()));
                     }
