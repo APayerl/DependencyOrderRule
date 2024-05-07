@@ -28,15 +28,15 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
                 getLog().info("Checking for " + sortOrder.getFirst() + " before " + sortOrder.getThen());
                 List<Dependency> listOfDeps = dependencies.stream()
                         .filter(dep ->
-                                dep.getScope().equalsIgnoreCase(sortOrder.getFirst().value) ||
-                                dep.getScope().equalsIgnoreCase(sortOrder.getThen().value))
+                                dep.getScope().equalsIgnoreCase(sortOrder.getFirst()) ||
+                                dep.getScope().equalsIgnoreCase(sortOrder.getThen()))
                         .collect(Collectors.toList());
                 for(int i = 1; i < listOfDeps.size(); i++) {
                     Dependency prevDep = listOfDeps.get(i-1);
                     Dependency currentDep = listOfDeps.get(i);
 
-                    if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen().value) &&
-                            currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst().value)) {
+                    if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen()) &&
+                            currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst())) {
                         exceptions.add(new EnforcerRuleException("Dependency " + prevDep.getGroupId() + ":" + prevDep.getArtifactId() + " must be before " + currentDep.getGroupId() + ":" + currentDep.getArtifactId()));
                     }
                 }

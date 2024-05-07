@@ -4,30 +4,29 @@ import jakarta.inject.Named;
 
 @Named("SortOrder")
 public class SortOrder {
-
-    Scope first;
-    Scope then;
+    String first;
+    String then;
 
     public SortOrder() { }
-    public SortOrder(Scope first, Scope then) {
+    public SortOrder(String first, String then) {
         this.first = first;
         this.then = then;
     }
 
-    public Scope getFirst() {
+    public String getFirst() {
         return first;
     }
 
-    public Scope getThen() {
+    public String getThen() {
         return then;
     }
 
-    public SortOrder setFirst(Scope first) {
+    public SortOrder setFirst(String first) {
         this.first = first;
         return this;
     }
 
-    public SortOrder setThen(Scope then) {
+    public SortOrder setThen(String then) {
         this.then = then;
         return this;
     }
