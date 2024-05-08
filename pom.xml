@@ -6,6 +6,7 @@
 
     <groupId>se.payerl</groupId>
     <artifactId>DependencyOrderRule</artifactId>
+    <packaging>jar</packaging>
     <version>2.0.0</version>
 
     <properties>
@@ -49,6 +50,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
+                </configuration>
             </plugin>
         </plugins>
     </build>
