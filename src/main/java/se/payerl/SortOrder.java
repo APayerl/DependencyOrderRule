@@ -1,38 +1,13 @@
 package se.payerl;
 
-import javax.inject.Named;
+import org.apache.maven.model.Dependency;
 
-@Named("sortOrder")
-public class SortOrder {
-    String first;
-    String then;
-
-    public SortOrder() { }
-    public SortOrder(String first, String then) {
-        this.first = first;
-        this.then = then;
-    }
-
-    public String getFirst() {
-        return first;
-    }
-
-    public String getThen() {
-        return then;
-    }
-
-    public SortOrder setFirst(String first) {
-        this.first = first;
-        return this;
-    }
-
-    public SortOrder setThen(String then) {
-        this.then = then;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SortOrder{first=" + first + ", then=" + then + "}";
-    }
+public interface SortOrder<Order> {
+    String getFirst();
+    String getThen();
+    Order setFirst(String first);
+    Order setThen(String then);
+    String toString();
+    String getFilter(Dependency dep);
+    String depToStr(Dependency dep);
 }
