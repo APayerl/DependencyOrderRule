@@ -6,7 +6,7 @@
 
     <groupId>se.payerl</groupId>
     <artifactId>DependencyOrderRule</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
 <!--        <api.version>3.4.1</api.version>-->
