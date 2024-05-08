@@ -28,8 +28,8 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
                 getLog().info("Checking for " + sortOrder.getFirst() + " before " + sortOrder.getThen());
                 List<Dependency> listOfDeps = dependencies.stream()
                         .filter(dep ->
-                                dep.getScope().equalsIgnoreCase(sortOrder.getFirst()) ||
-                                dep.getScope().equalsIgnoreCase(sortOrder.getThen()))
+                                sortOrder.getFilter(dep).equalsIgnoreCase(sortOrder.getFirst()) ||
+                                sortOrder.getFilter(dep).equalsIgnoreCase(sortOrder.getThen()))
                         .collect(Collectors.toList());
                 for(int i = 1; i < listOfDeps.size(); i++) {
                     compDeps(sortOrder, exceptions, listOfDeps.get(i-1), listOfDeps.get(i));
@@ -54,14 +54,10 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         return "[" + list.stream().map(SortOrder::toString).collect(Collectors.joining(",")) + "]";
     }
 
-    private String depToStr(Dependency dep) {
-        return dep.getGroupId() + ":" + dep.getArtifactId() + " scope:" + dep.getScope();
-    }
-
     private void compDeps(SortOrder sortOrder, List<String> exceps, Dependency prevDep, Dependency currentDep) {
-        if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen()) &&
-                currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst())) {
-            exceps.add("Dependency " + depToStr(currentDep) + " must be before " + depToStr(prevDep));
+        if(sortOrder.getFilter(prevDep).equalsIgnoreCase(sortOrder.getThen()) &&
+                sortOrder.getFilter(currentDep).equalsIgnoreCase(sortOrder.getFirst())) {
+            exceps.add("Dependency " + sortOrder.depToStr(currentDep) + " must be before " + sortOrder.depToStr(prevDep));
         }
     }
 }
