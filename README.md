@@ -7,6 +7,7 @@ and throws an exception if they are not in the correct order.
 - [How to use](#how-to-use)
 - [Available SortOrders](#available-sortorders)
 - [Example](#example)
+- [License](#license)
 
 ## Prerequisites
  - Java 8 or later
@@ -49,3 +50,5 @@ Please note that the DependencyOrderRule only checks the order of dependencies w
     </executions>
 </plugin>
 ```
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
