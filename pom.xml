@@ -9,6 +9,31 @@
     <packaging>jar</packaging>
     <version>2.0.0</version>
 
+    <developers>
+        <developer>
+            <id>APayerl</id>
+            <name>Anders Payerl</name>
+            <email>anders_payerl@msn.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/APayerl/DependencyOrderRule</url>
+        <connection>scm:git:git://github.com/APayerl/DependencyOrderRule.git</connection>
+        <developerConnection>scm:git:ssh://github.com/APayerl/DependencyOrderRule.git</developerConnection>
+    </scm>
+
+    <url>https://github.com/APayerl/DependencyOrderRule</url>
+    <description>Custom rule for the Maven Enforcer Plugin to order dependencies</description>
+
     <properties>
         <api.version>3.4.1</api.version>
         <mavenVersion>3.2.5</mavenVersion>
@@ -62,6 +87,46 @@
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
