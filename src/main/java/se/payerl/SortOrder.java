@@ -2,7 +2,7 @@ package se.payerl;
 
 import javax.inject.Named;
 
-@Named("SortOrder")
+@Named("sortOrder")
 public class SortOrder {
     String first;
     String then;
