@@ -1,6 +1,6 @@
 package se.payerl;
 
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Named("SortOrder")
 public class SortOrder {
