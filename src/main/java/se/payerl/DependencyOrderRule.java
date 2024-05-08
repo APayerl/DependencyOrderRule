@@ -17,7 +17,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     @Component
     @jakarta.inject.Inject
     @javax.inject.Inject
-    @Parameter
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
     private List<SortOrder> SortOrders;
