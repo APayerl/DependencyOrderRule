@@ -21,7 +21,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     @Override
     public void execute() throws EnforcerRuleException {
         List<Dependency> dependencies = project.getDependencies();
-        List<EnforcerRuleException> exceptions = new ArrayList<>();
+        List<String> exceptions = new ArrayList<>();
 
         if(dependencies.size() > 1) {
             SortOrders.forEach(sortOrder -> {
@@ -37,7 +37,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
                     if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen()) &&
                             currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst())) {
-                        exceptions.add(new EnforcerRuleException("Dependency " + prevDep.getGroupId() + ":" + prevDep.getArtifactId() + " must be before " + currentDep.getGroupId() + ":" + currentDep.getArtifactId()));
+                        exceptions.add("Dependency " + prevDep.getGroupId() + ":" + prevDep.getArtifactId() + " must be before " + currentDep.getGroupId() + ":" + currentDep.getArtifactId());
                     }
                 }
             });
@@ -46,9 +46,8 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         }
 
         if(!exceptions.isEmpty()) {
-            EnforcerRuleException ex = new EnforcerRuleException("Dependencies are not in correct order");
-            exceptions.forEach(ex::addSuppressed);
-            throw ex;
+            String exceptionMessages = String.join("\n", exceptions);
+            throw new EnforcerRuleException("Dependencies are not in correct order:\n" + exceptionMessages);
         }
     }
 
