@@ -37,7 +37,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
                     if(prevDep.getScope().equalsIgnoreCase(sortOrder.getThen()) &&
                             currentDep.getScope().equalsIgnoreCase(sortOrder.getFirst())) {
-                        exceptions.add("Dependency " + prevDep.getGroupId() + ":" + prevDep.getArtifactId() + " must be before " + currentDep.getGroupId() + ":" + currentDep.getArtifactId());
+                        exceptions.add("Dependency " + currentDep.getGroupId() + ":" + currentDep.getArtifactId() + " must be before " + prevDep.getGroupId() + ":" + prevDep.getArtifactId());
                     }
                 }
             });
