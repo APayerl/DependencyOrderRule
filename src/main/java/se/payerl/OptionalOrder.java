@@ -3,6 +3,7 @@ package se.payerl;
 import org.apache.maven.model.Dependency;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OptionalOrder extends SortOrder<OptionalOrder> {
     String first;
@@ -11,7 +12,7 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
     public OptionalOrder() { }
 
     private String getOptional(Dependency dep) {
-        return dep.getOptional().equalsIgnoreCase("true") ? "true" : "false";
+        return Boolean.toString(Objects.equals(dep.getOptional(), "true"));
     }
 
     @Override
