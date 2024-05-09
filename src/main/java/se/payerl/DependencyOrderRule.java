@@ -25,14 +25,12 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
         if(dependencies.size() > 1) {
             SortOrders.forEach(sortOrder -> {
-                getLog().info("Checking for " + sortOrder.getFirst() + " before " + sortOrder.getThen());
+                getLog().info(sortOrder.getJob());
                 List<Dependency> listOfDeps = dependencies.stream()
-                        .filter(dep ->
-                                sortOrder.getFilter(dep).equalsIgnoreCase(sortOrder.getFirst()) ||
-                                sortOrder.getFilter(dep).equalsIgnoreCase(sortOrder.getThen()))
+                        .filter(sortOrder::isDependencyApplicable)
                         .collect(Collectors.toList());
                 for(int i = 1; i < listOfDeps.size(); i++) {
-                    compDeps(sortOrder, errors, listOfDeps.get(i-1), listOfDeps.get(i));
+                    sortOrder.compareTo(listOfDeps.get(i-1), listOfDeps.get(i), errors);
                 }
             });
         } else {
@@ -52,12 +50,5 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     private String listToString(List<SortOrder> list) {
         return "[" + list.stream().map(SortOrder::toString).collect(Collectors.joining(",")) + "]";
-    }
-
-    private void compDeps(SortOrder sortOrder, List<String> exceps, Dependency prevDep, Dependency currentDep) {
-        if(sortOrder.getFilter(prevDep).equalsIgnoreCase(sortOrder.getThen()) &&
-                sortOrder.getFilter(currentDep).equalsIgnoreCase(sortOrder.getFirst())) {
-            exceps.add("Dependency " + sortOrder.depToStr(currentDep) + " must be before " + sortOrder.depToStr(prevDep));
-        }
     }
 }

@@ -19,9 +19,23 @@ and throws an exception if they are not in the correct order.
 3. Run your Maven build. If the dependencies are not in the correct order according to your SortOrder configuration, the build will fail with an EnforcerRuleException.
 
 ### Available SortOrders
-**ScopeOrder**: Used to sort based on the scope tag.
+1. **ScopeOrder**: Used to sort based on the scope tag.
+  : Takes a `<first>` and `<then>` tag. 
+  : The first tag should be the scope that should come first, and the then tag should be the scope that should come after.
+  : Both should be one of the values valid for a dependency scope in Maven.
+
+2. **OptionalOrder**: Used to sort based on the optional tag.
+  : Takes a `<first>` and `<then>` tag. 
+  : The first tag should be the optional value that should come first, and the then tag should be the optional value that should come after.
+  : Both should be one of the values valid for the optional tag in Maven.
+
+3. **AlphabeticalOrder**: Used to sort based on the groupId:artifactId tags.
+  : Takes a `<inversed>` tag.
+  : If the inversed tag is set to true, the alphabetical order will be reversed.
    
 Please note that the DependencyOrderRule only checks the order of dependencies within the same pom.xml file. It does not check the order of transitive dependencies.
+
+Also worth noting is that multiple rules at once can be used BUT the rules could collide.
 
 ## Example
 ```
@@ -42,6 +56,13 @@ Please note that the DependencyOrderRule only checks the order of dependencies w
                                 <first>compile</first>
                                 <then>test</then>
                             </ScopeOrder>
+                            <OptionalOrder>
+                                <first>false</first>
+                                <then>true</then>
+                            </OptionalOrder>
+                            <AlphabeticalOrder>
+                                <inversed>false</inversed>
+                            </AlphabeticalOrder>
                         </SortOrders>
                     </dependencyOrderRule>
                 </rules>
