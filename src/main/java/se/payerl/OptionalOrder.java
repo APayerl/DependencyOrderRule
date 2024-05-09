@@ -10,6 +10,10 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
 
     public OptionalOrder() { }
 
+    private String getOptional(Dependency dep) {
+        return dep.getOptional().equalsIgnoreCase("true") ? "true" : "false";
+    }
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{first=" + first + ", then=" + then + "}";
@@ -17,12 +21,12 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
 
     @Override
     public String getFilter(Dependency dep) {
-        return dep.getOptional();
+        return getOptional(dep);
     }
 
     @Override
     public String depToStr(Dependency dep) {
-        return dep.getGroupId() + ":" + dep.getArtifactId() + " optional:" + dep.getOptional();
+        return dep.getGroupId() + ":" + dep.getArtifactId() + " optional:" + getOptional(dep);
     }
 
     @Override
