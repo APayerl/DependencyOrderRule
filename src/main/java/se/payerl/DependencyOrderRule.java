@@ -21,7 +21,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     @Override
     public void execute() throws EnforcerRuleException {
         List<Dependency> dependencies = project.getDependencies();
-        List<String> exceptions = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
 
         if(dependencies.size() > 1) {
             SortOrders.forEach(sortOrder -> {
@@ -32,15 +32,15 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
                                 sortOrder.getFilter(dep).equalsIgnoreCase(sortOrder.getThen()))
                         .collect(Collectors.toList());
                 for(int i = 1; i < listOfDeps.size(); i++) {
-                    compDeps(sortOrder, exceptions, listOfDeps.get(i-1), listOfDeps.get(i));
+                    compDeps(sortOrder, errors, listOfDeps.get(i-1), listOfDeps.get(i));
                 }
             });
         } else {
             getLog().info("Not enough dependencies to order");
         }
 
-        if(!exceptions.isEmpty()) {
-            String exceptionMessages = String.join("\n", exceptions);
+        if(!errors.isEmpty()) {
+            String exceptionMessages = String.join("\n", errors);
             throw new EnforcerRuleException("Dependencies are not in correct order:\n" + exceptionMessages);
         }
     }

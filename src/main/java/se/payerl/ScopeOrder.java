@@ -2,7 +2,7 @@ package se.payerl;
 
 import org.apache.maven.model.Dependency;
 
-public class ScopeOrder implements SortOrder<ScopeOrder> {
+public class ScopeOrder extends SortOrder<ScopeOrder> {
     String first;
     String then;
 
