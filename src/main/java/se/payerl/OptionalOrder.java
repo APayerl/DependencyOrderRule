@@ -2,8 +2,6 @@ package se.payerl;
 
 import org.apache.maven.model.Dependency;
 
-import java.util.List;
-
 public class OptionalOrder extends SortOrder<OptionalOrder> {
     String first;
     String then;
@@ -32,7 +30,7 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
 
     @Override
     public String toString() {
-        return "OptionalOrder{first=" + first + ", then=" + then + "}";
+        return this.getClass().getSimpleName() + "{first=" + first + ", then=" + then + "}";
     }
 
     @Override
