@@ -15,7 +15,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          distribution: 'adopt'
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - uses: s4u/maven-settings-action@v3.0.0
         with:
           servers: |
@@ -33,6 +34,3 @@ jobs:
           create_tag: true
       - name: Publish to Maven Central
         run: mvn deploy
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          MAVEN_GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
