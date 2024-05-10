@@ -1,14 +1,13 @@
-name: CI
+name: Merge to Master
 
 on:
+  pull_request:
   push:
     branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -18,17 +17,6 @@ jobs:
         with:
           java-version: 8.0.412+8
           distribution: 'adopt'
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - uses: s4u/maven-settings-action@v3.0.0
-        with:
-          servers: |
-            [{
-                "id": "central",
-                "username": "${{ secrets.OSSRH_USERNAME }}",
-                "password": "${{ secrets.OSSRH_TOKEN }}"
-            }]
-
       - name: Bump version and push tag
         id: version
         uses: mathieudutour/github-tag-action@v6.2
@@ -37,9 +25,9 @@ jobs:
           release_branches: master
           create_annotated_tag: false
           tag_prefix: ''
+          default_bump: false
+          dry_run: true
       - name: Bump version in pom.xml
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Publish to Maven Central
-        run: mvn deploy
