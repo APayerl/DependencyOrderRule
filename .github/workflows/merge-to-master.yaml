@@ -41,8 +41,8 @@ jobs:
       - name: Bump version in pom.xml
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
       - name: Build with Maven
-        if: steps.version.outputs.new_tag != undefined
+        if: steps.version.outputs.new_tag
         run: mvn -B package --file pom.xml
       - name: Publish to Maven Central
-        if: steps.version.outputs.new_tag != undefined
+        if: steps.version.outputs.new_tag
         run: mvn deploy
