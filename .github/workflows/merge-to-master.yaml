@@ -39,6 +39,7 @@ jobs:
           tag_prefix: ''
           default_bump: false
       - name: Bump version in pom.xml
+        if: steps.version.outputs.new_tag
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
       - name: Build with Maven
         if: steps.version.outputs.new_tag
