@@ -19,17 +19,17 @@ and throws an exception if they are not in the correct order.
 3. Run your Maven build. If the dependencies are not in the correct order according to your SortOrder configuration, the build will fail with an EnforcerRuleException.
 
 ### Available SortOrders
-1. **ScopeOrder**: Used to sort based on the scope tag.
+- **ScopeOrder**: Used to sort based on the scope tag.
   : Takes a `<first>` and `<then>` tag. 
   : The first tag should be the scope that should come first, and the then tag should be the scope that should come after.
   : Both should be one of the values valid for a dependency scope in Maven.
 
-2. **OptionalOrder**: Used to sort based on the optional tag.
+- **OptionalOrder**: Used to sort based on the optional tag.
   : Takes a `<first>` and `<then>` tag. 
   : The first tag should be the optional value that should come first, and the then tag should be the optional value that should come after.
   : Both should be one of the values valid for the optional tag in Maven.
 
-3. **AlphabeticalOrder**: Used to sort based on the groupId:artifactId tags.
+- **AlphabeticalOrder**: Used to sort based on the groupId:artifactId tags.
   : Takes a `<inversed>` tag.
   : If the inversed tag is set to true, the alphabetical order will be reversed.
    
