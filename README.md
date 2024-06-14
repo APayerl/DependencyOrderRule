@@ -71,5 +71,6 @@ Also worth noting is that multiple rules at once can be used BUT the rules could
     </executions>
 </plugin>
 ```
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
