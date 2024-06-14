@@ -20,7 +20,31 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     @Override
     public void execute() throws EnforcerRuleException {
-        List<Dependency> dependencies = project.getDependencies();
+        List<String> dependencyErrors = checkDependencyList(project.getDependencies());
+        List<String> dependencyManagementErrors = checkDependencyList(project.getDependencyManagement().getDependencies());
+
+        if((dependencyErrors.size() + dependencyManagementErrors.size()) > 0) {
+            String exceptionMessages = "";
+
+            if(!dependencyErrors.isEmpty()) {
+                String exceptionMsg = String.join("\n", dependencyErrors);
+                exceptionMessages += "<dependencies> dependencies are not in correct order:\n" + exceptionMsg;
+            }
+
+            if(!dependencyErrors.isEmpty() && !dependencyManagementErrors.isEmpty()) {
+                exceptionMessages += "\n\n";
+            }
+
+            if(!dependencyManagementErrors.isEmpty()) {
+                String exceptionMsg = String.join("\n", dependencyManagementErrors);
+                exceptionMessages += "<dependencyManagement> dependencies are not in correct order:\n" + exceptionMsg;
+            }
+
+            throw new EnforcerRuleException(exceptionMessages);
+        }
+    }
+
+    private List<String> checkDependencyList(List<Dependency> dependencies) {
         List<String> errors = new ArrayList<>();
 
         if(dependencies.size() > 1) {
@@ -37,10 +61,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
             getLog().info("Not enough dependencies to order");
         }
 
-        if(!errors.isEmpty()) {
-            String exceptionMessages = String.join("\n", errors);
-            throw new EnforcerRuleException("Dependencies are not in correct order:\n" + exceptionMessages);
-        }
+        return errors;
     }
 
     @Override
