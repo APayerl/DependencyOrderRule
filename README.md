@@ -1,6 +1,6 @@
 # DependencyOrderRule
 
-This is a custom rule for the Maven Enforcer Plugin. The rule checks the order of dependencies in your Maven project 
+This is a custom rule for the Maven Enforcer Plugin. The rule checks the order of your dependencies and dependencyManagement dependencies of your Maven project 
 and throws an exception if they are not in the correct order.
 
 - [Prerequisites](#prerequisites)
