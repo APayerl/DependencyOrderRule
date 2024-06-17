@@ -3,6 +3,7 @@ package se.payerl;
 import org.apache.maven.model.Dependency;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ScopeOrder extends SortOrder<ScopeOrder> {
     String first;
@@ -31,8 +32,10 @@ public class ScopeOrder extends SortOrder<ScopeOrder> {
 
     @Override
     void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
-        if(this.getFilter(prevDep).equalsIgnoreCase(then) &&
-                this.getFilter(currentDep).equalsIgnoreCase(first)) {
+        if(prevDep.getScope() == null) prevDep.setScope("compile");
+        if(currentDep.getScope() == null) currentDep.setScope("compile");
+
+        if(Objects.equals(this.getFilter(prevDep), then) && Objects.equals(this.getFilter(currentDep), first)) {
             errors.add("Dependency " + this.depToStr(currentDep) + " must be before " + this.depToStr(prevDep));
         }
     }
@@ -44,7 +47,6 @@ public class ScopeOrder extends SortOrder<ScopeOrder> {
 
     @Override
     boolean isDependencyApplicable(Dependency dep) {
-        return this.getFilter(dep).equalsIgnoreCase(first) ||
-                this.getFilter(dep).equalsIgnoreCase(then);
+        return Objects.equals(this.getFilter(dep), first) || Objects.equals(this.getFilter(dep), then);
     }
 }
