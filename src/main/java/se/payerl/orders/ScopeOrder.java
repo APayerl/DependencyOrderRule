@@ -17,11 +17,6 @@ public class ScopeOrder extends SortOrder {
     }
 
     @Override
-    protected List<? extends SortOrder> getSeparates() {
-        return List.of();
-    }
-
-    @Override
     public String toString() {
         return "ScopeOrder{first=" + first + ", then=" + then + "}";
     }
