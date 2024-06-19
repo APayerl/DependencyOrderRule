@@ -35,8 +35,6 @@
     <description>Custom rule for the Maven Enforcer Plugin to order dependencies</description>
 
     <properties>
-        <api.version>3.4.1</api.version>
-        <mavenVersion>3.2.5</mavenVersion>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -45,13 +43,13 @@
         <dependency>
             <groupId>org.apache.maven.enforcer</groupId>
             <artifactId>enforcer-api</artifactId>
-            <version>${api.version}</version>
+            <version>3.5.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>${mavenVersion}</version>
+            <version>3.9.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

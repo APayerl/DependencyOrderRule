@@ -1,10 +1,11 @@
-package se.payerl;
+package se.payerl.orders;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.SortOrder;
 
 import java.util.List;
 
-public class AlphabeticalOrder extends SortOrder<AlphabeticalOrder> {
+public class AlphabeticalOrder extends SortOrder {
     boolean inversed = false;
 
     public AlphabeticalOrder() { }
@@ -15,22 +16,22 @@ public class AlphabeticalOrder extends SortOrder<AlphabeticalOrder> {
     }
 
     @Override
-    String getFilter(Dependency dep) {
+    protected String getFilter(Dependency dep) {
         return dep.getGroupId() + ":" + dep.getArtifactId();
     }
 
     @Override
-    String depToStr(Dependency dep) {
+    protected String depToStr(Dependency dep) {
         return getFilter(dep);
     }
 
     @Override
-    String getJob() {
+    protected String getJob() {
         return "Checking for" + (inversed ? " inversed " : " ") + "alphabetical order";
     }
 
     @Override
-    void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
+    protected void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
         String prev = prevDep.getGroupId() + ":" + prevDep.getArtifactId();
         String curr = currentDep.getGroupId() + ":" + currentDep.getArtifactId();
         if(!inversed && prev.compareToIgnoreCase(curr) > 0 ||
@@ -40,7 +41,7 @@ public class AlphabeticalOrder extends SortOrder<AlphabeticalOrder> {
     }
 
     @Override
-    boolean isDependencyApplicable(Dependency dep) {
+    protected boolean isDependencyApplicable(Dependency dep) {
         return true;
     }
 }

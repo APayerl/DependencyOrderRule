@@ -18,7 +18,7 @@ and throws an exception if they are not in the correct order.
 2. Configure the DependencyOrderRule by adding SortOrder elements to the rule configuration. Each SortOrder element represents a pair of dependency scopes that should be ordered in a certain way. The first attribute should be the scope that should come first, and the then attribute should be the scope that should come after.
 3. Run your Maven build. If the dependencies are not in the correct order according to your SortOrder configuration, the build will fail with an EnforcerRuleException.
 
-### Available SortOrders
+Available SortOrders
 - **ScopeOrder**: Used to sort based on the scope tag.
   : Takes a `<first>` and `<then>` tag. 
   : The first tag should be the scope that should come first, and the then tag should be the scope that should come after.
@@ -37,11 +37,19 @@ Please note that the DependencyOrderRule only checks the order of dependencies w
 
 Also worth noting is that multiple rules at once can be used BUT the rules could collide.
 
+**Latest version:** [![Maven Central](https://img.shields.io/maven-central/v/se.payerl/DependencyOrderRule.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22se.payerl%22%20AND%20a:%22DependencyOrderRule%22)
 ## Example
 ```
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-enforcer-plugin</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>se.payerl</groupId>
+            <artifactId>DependencyOrderRule</artifactId>
+            <version>INSERT_LATEST_VERSION_HERE</version>
+        </dependency>
+    </dependencies>
     <executions>
         <execution>
             <id>enforce-rules</id>

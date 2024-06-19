@@ -1,11 +1,12 @@
-package se.payerl;
+package se.payerl.orders;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.SortOrder;
 
 import java.util.List;
 import java.util.Objects;
 
-public class OptionalOrder extends SortOrder<OptionalOrder> {
+public class OptionalOrder extends SortOrder {
     String first;
     String then;
 
@@ -31,7 +32,7 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
     }
 
     @Override
-    void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
+    protected void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
         if(this.getFilter(prevDep).equalsIgnoreCase(then) &&
                 this.getFilter(currentDep).equalsIgnoreCase(first)) {
             errors.add("Dependency " + this.depToStr(currentDep) + " must be before " + this.depToStr(prevDep));
@@ -39,12 +40,12 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
     }
 
     @Override
-    String getJob() {
+    protected String getJob() {
         return "Checking for " + first + " before " + then;
     }
 
     @Override
-    boolean isDependencyApplicable(Dependency dep) {
+    protected boolean isDependencyApplicable(Dependency dep) {
         return this.getFilter(dep).equalsIgnoreCase(first) ||
                 this.getFilter(dep).equalsIgnoreCase(then);
     }

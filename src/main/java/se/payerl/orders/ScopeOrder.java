@@ -1,11 +1,12 @@
-package se.payerl;
+package se.payerl.orders;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.SortOrder;
 
 import java.util.List;
 import java.util.Objects;
 
-public class ScopeOrder extends SortOrder<ScopeOrder> {
+public class ScopeOrder extends SortOrder {
     String first;
     String then;
 
@@ -13,6 +14,11 @@ public class ScopeOrder extends SortOrder<ScopeOrder> {
     public ScopeOrder(String first, String then) {
         this.first = first;
         this.then = then;
+    }
+
+    @Override
+    protected List<? extends SortOrder> getSeparates() {
+        return List.of();
     }
 
     @Override
@@ -30,10 +36,14 @@ public class ScopeOrder extends SortOrder<ScopeOrder> {
         return dep.getGroupId() + ":" + dep.getArtifactId() + " scope:" + dep.getScope();
     }
 
+    private void preFormat(Dependency dep) {
+        if(dep.getScope() == null) dep.setScope("compile");
+    }
+
     @Override
-    void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
-        if(prevDep.getScope() == null) prevDep.setScope("compile");
-        if(currentDep.getScope() == null) currentDep.setScope("compile");
+    protected void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
+        preFormat(prevDep);
+        preFormat(currentDep);
 
         if(Objects.equals(this.getFilter(prevDep), then) && Objects.equals(this.getFilter(currentDep), first)) {
             errors.add("Dependency " + this.depToStr(currentDep) + " must be before " + this.depToStr(prevDep));
@@ -41,12 +51,13 @@ public class ScopeOrder extends SortOrder<ScopeOrder> {
     }
 
     @Override
-    String getJob() {
+    protected String getJob() {
         return "Checking for " + first + " before " + then;
     }
 
     @Override
-    boolean isDependencyApplicable(Dependency dep) {
+    protected boolean isDependencyApplicable(Dependency dep) {
+        preFormat(dep);
         return Objects.equals(this.getFilter(dep), first) || Objects.equals(this.getFilter(dep), then);
     }
 }

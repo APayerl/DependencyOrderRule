@@ -8,7 +8,9 @@ import org.apache.maven.project.MavenProject;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Named("dependencyOrderRule")
@@ -48,14 +50,37 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         List<String> errors = new ArrayList<>();
 
         if(dependencies.size() > 1) {
-            SortOrders.forEach(sortOrder -> {
-                getLog().info(sortOrder.getJob());
+            SortOrders.forEach(order -> {
+                getLog().info(order.getJob());
                 List<Dependency> listOfDeps = dependencies.stream()
-                        .filter(sortOrder::isDependencyApplicable)
+                        .filter(order::isDependencyApplicable)
                         .collect(Collectors.toList());
-                for(int i = 1; i < listOfDeps.size(); i++) {
-                    sortOrder.compareTo(listOfDeps.get(i-1), listOfDeps.get(i), errors);
+                Map<String, List<Dependency>> depGroups = new HashMap<>();
+
+                depGroups.put("default", new ArrayList<>());
+                for(Dependency dep: listOfDeps) {
+                    boolean grouped = false;
+                    for(SortOrder separate: order.separates) {
+                        if(separate.isDependencyApplicable(dep)) {
+                            String key = separate.toString();
+                            if(!depGroups.containsKey(key)) {
+                                depGroups.put(key, new ArrayList<>());
+                            }
+                            depGroups.get(key).add(dep);
+                            grouped = true;
+                            break;
+                        }
+                    }
+                    if(!grouped) depGroups.get("default").add(dep);
                 }
+
+                depGroups.values().forEach(deps -> {
+                    if(deps.size() > 1) {
+                        for (int i = 1; i < deps.size(); i++) {
+                            order.compareTo(deps.get(i - 1), deps.get(i), errors);
+                        }
+                    } else getLog().info("Not enough dependencies to order");
+                });
             });
         } else {
             getLog().info("Not enough dependencies to order");
