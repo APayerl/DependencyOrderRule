@@ -22,6 +22,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     @Override
     public void execute() throws EnforcerRuleException {
+        System.out.println("Executing DependencyOrderRule");
         List<String> dependencyErrors = checkDependencyList(project.getDependencies());
 //        List<String> dependencyManagementErrors = checkDependencyList(project.getDependencyManagement().getDependencies());
 
