@@ -20,8 +20,12 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     @Override
     public void execute() throws EnforcerRuleException {
-        List<String> dependencyErrors = checkDependencyList(project.getDependencies());
-        List<String> dependencyManagementErrors = checkDependencyList(project.getDependencyManagement().getDependencies());
+        List<String> dependencyErrors = checkDependencyList(project.getOriginalModel().getDependencies());
+        
+        List<String> dependencyManagementErrors = new ArrayList<>();
+        if (project.getOriginalModel().getDependencyManagement() != null) {
+            dependencyManagementErrors = checkDependencyList(project.getOriginalModel().getDependencyManagement().getDependencies());
+        }
 
         if((dependencyErrors.size() + dependencyManagementErrors.size()) > 0) {
             String exceptionMessages = "";
@@ -47,7 +51,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     private List<String> checkDependencyList(List<Dependency> dependencies) {
         List<String> errors = new ArrayList<>();
 
-        if(dependencies.size() > 1) {
+        if(dependencies != null && dependencies.size() > 1) {
             SortOrders.forEach(sortOrder -> {
                 getLog().info(sortOrder.getJob());
                 List<Dependency> listOfDeps = dependencies.stream()
@@ -66,7 +70,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     @Override
     public String toString() {
-        return String.format("DependencyOrderRule[SortOrders=%b]", listToString(SortOrders));
+        return String.format("DependencyOrderRule[SortOrders=%s]", listToString(SortOrders));
     }
 
     private String listToString(List<SortOrder> list) {
