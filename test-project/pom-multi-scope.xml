@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>se.payerl.test</groupId>
-    <artifactId>hierarchical-example</artifactId>
+    <artifactId>multi-scope-example</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -15,10 +15,11 @@
     </properties>
 
     <!-- 
-    Hierarkisk dependency-ordning:
+    Multi-scope hierarkisk dependency-ordning:
     1. Alla compile dependencies kommer först
-    2. Alla test dependencies kommer sedan  
-    3. Inom varje grupp sorteras dependencies alfabetiskt
+    2. Alla provided dependencies kommer sedan
+    3. Alla test dependencies kommer sist
+    4. Inom varje grupp sorteras dependencies alfabetiskt
     -->
     <dependencies>
         <!-- Compile dependencies - alfabetiskt sorterade -->
@@ -31,6 +32,20 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
+        </dependency>
+        
+        <!-- Provided dependencies - alfabetiskt sorterade -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
         </dependency>
         
         <!-- Test dependencies - alfabetiskt sorterade -->
@@ -63,25 +78,26 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>enforce-hierarchical-dependency-order</id>
+                        <id>enforce-multi-scope-dependency-order</id>
                         <goals>
                             <goal>enforce</goal>
                         </goals>
                         <configuration>
                             <rules>
                                 <!-- 
-                                HIERARKISK SORTERING:
+                                MULTI-SCOPE HIERARKISK SORTERING:
                                 - hierarchical="true" aktiverar hierarkisk mode
-                                - Första regeln (ScopeOrder) grupperar dependencies efter scope
+                                - Första regeln (ScopeOrder) med flera <then> taggar
                                 - Andra regeln (AlphabeticalOrder) sorterar inom varje grupp
                                 
-                                Resultat: compile först (alfabetiskt), sedan test (alfabetiskt)
+                                Resultat: compile -> provided -> test (alla alfabetiskt sorterade)
                                 -->
                                 <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
                                     <hierarchical>true</hierarchical>
                                     <SortOrders>
                                         <ScopeOrder>
                                             <first>compile</first>
+                                            <then>provided</then>
                                             <then>test</then>
                                         </ScopeOrder>
                                         <AlphabeticalOrder>

@@ -2,17 +2,63 @@ package se.payerl;
 
 import org.apache.maven.model.Dependency;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-public class OptionalOrder extends SortOrder<OptionalOrder> {
-    String first;
-    String then;
+/**
+ * Sorting order that checks that dependencies with certain optional values
+ * come in specified order.
+ * 
+ * For example, one can configure that non-optional dependencies should come before optional dependencies.
+ */
+public class OptionalOrder extends SortOrder {
+    private String first;
+    private String then;
 
+    /**
+     * Creates a new OptionalOrder without configuration.
+     * Requires that first and then are set via setter methods.
+     */
     public OptionalOrder() { }
 
-    private String getOptional(Dependency dep) {
-        return Boolean.toString(Objects.equals(dep.getOptional(), "true"));
+    /**
+     * Specifies which optional value should come first.
+     *
+     * @param first optional value that should come first ("true" or "false")
+     */
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    /**
+     * Specifies which optional value should come after first.
+     *
+     * @param then optional value that should come after first ("true" or "false")
+     */
+    public void setThen(String then) {
+        this.then = then;
+    }
+
+    /**
+     * Returns optional value that should come first.
+     *
+     * @return optional value that should come first
+     */
+    public String getFirst() {
+        return first;
+    }
+
+    /**
+     * Returns optional value that should come after first.
+     *
+     * @return optional value that should come after first
+     */
+    public String getThen() {
+        return then;
+    }
+
+    private String getOptionalValue(Dependency dependency) {
+        return Boolean.toString(Objects.equals(dependency.getOptional(), "true"));
     }
 
     @Override
@@ -21,31 +67,44 @@ public class OptionalOrder extends SortOrder<OptionalOrder> {
     }
 
     @Override
-    public String getFilter(Dependency dep) {
-        return getOptional(dep);
+    public String extractSortKey(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
+        return getOptionalValue(dependency);
     }
 
     @Override
-    public String depToStr(Dependency dep) {
-        return dep.getGroupId() + ":" + dep.getArtifactId() + " optional:" + getOptional(dep);
+    public String formatDependencyForError(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
+        return dependency.getGroupId() + ":" + dependency.getArtifactId() + " optional:" + getOptionalValue(dependency);
     }
 
     @Override
-    void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
-        if(this.getFilter(prevDep).equalsIgnoreCase(then) &&
-                this.getFilter(currentDep).equalsIgnoreCase(first)) {
-            errors.add("Dependency " + this.depToStr(currentDep) + " must be before " + this.depToStr(prevDep));
+    public Optional<String> validateOrder(Dependency previousDependency, Dependency currentDependency) {
+        requireNonNull(previousDependency, "previousDependency");
+        requireNonNull(currentDependency, "currentDependency");
+
+        String prevOptional = extractSortKey(previousDependency);
+        String currentOptional = extractSortKey(currentDependency);
+
+        if (prevOptional.equalsIgnoreCase(then) && currentOptional.equalsIgnoreCase(first)) {
+            String errorMessage = String.format("Dependency %s must be before %s", 
+                                               formatDependencyForError(currentDependency),
+                                               formatDependencyForError(previousDependency));
+            return Optional.of(errorMessage);
         }
+        
+        return Optional.empty();
     }
 
     @Override
-    String getJob() {
+    public String getDescription() {
         return "Checking for " + first + " before " + then;
     }
 
     @Override
-    boolean isDependencyApplicable(Dependency dep) {
-        return this.getFilter(dep).equalsIgnoreCase(first) ||
-                this.getFilter(dep).equalsIgnoreCase(then);
+    public boolean isApplicable(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
+        String optionalValue = extractSortKey(dependency);
+        return optionalValue.equalsIgnoreCase(first) || optionalValue.equalsIgnoreCase(then);
     }
 }

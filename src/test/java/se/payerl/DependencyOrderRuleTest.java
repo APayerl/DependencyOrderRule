@@ -1,6 +1,7 @@
 package se.payerl;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
+import org.apache.maven.enforcer.rule.api.EnforcerLogger;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
@@ -25,12 +26,19 @@ public class DependencyOrderRuleTest {
     @Mock
     private Model mockModel;
 
+    @Mock
+    private EnforcerLogger mockLogger;
+
     private DependencyOrderRule rule;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         rule = new DependencyOrderRule();
+        
+        // Mock the getLog() method to return our mock logger
+        rule = spy(new DependencyOrderRule());
+        when(rule.getLog()).thenReturn(mockLogger);
         
         // Inject the mock project using reflection
         try {
