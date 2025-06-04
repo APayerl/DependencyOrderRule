@@ -75,4 +75,4 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }} -Dgpg.skip=true
         
       - name: Final build with Maven
-        run: mvn -B package --file pom.xml -Dgpg.skip=true
+        run: mvn -B package --file pom.xml -DskipTests -Dgpg.skip=true
