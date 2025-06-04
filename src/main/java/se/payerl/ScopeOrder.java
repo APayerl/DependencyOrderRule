@@ -1,6 +1,8 @@
 package se.payerl;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.model.Scope;
+import se.payerl.sort.SortOrder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

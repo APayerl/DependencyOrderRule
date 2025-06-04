@@ -1,4 +1,4 @@
-package se.payerl;
+package se.payerl.sort;
 
 import org.apache.maven.model.Dependency;
 

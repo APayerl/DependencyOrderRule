@@ -10,6 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import se.payerl.DependencyOrderRule;
+import se.payerl.sort.SortOrder;
+import se.payerl.AlphabeticalOrder;
+import se.payerl.ScopeOrder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

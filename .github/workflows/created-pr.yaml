@@ -31,10 +31,10 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       
       - name: Bygg och installera plugin lokalt
-        run: mvn clean install -DskipTests -Dgpg.skip=true
+        run: mvn clean install -DskipTests
       
       - name: Kör alla tester (unit + integration)
-        run: mvn verify -Dgpg.skip=true
+        run: mvn verify
       
       - name: Ladda upp test-resultat
         uses: actions/upload-artifact@v4.6.2
@@ -72,7 +72,7 @@ jobs:
           dry_run: true
           
       - name: Bump version in pom.xml
-        run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }} -Dgpg.skip=true
+        run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
         
       - name: Final build with Maven
-        run: mvn -B package --file pom.xml -DskipTests -Dgpg.skip=true
+        run: mvn -B package --file pom.xml -DskipTests

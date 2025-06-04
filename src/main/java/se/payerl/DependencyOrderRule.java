@@ -4,6 +4,10 @@ import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
+import se.payerl.sort.SortNode;
+import se.payerl.sort.SortOrder;
+import se.payerl.sort.node.GroupNode;
+import se.payerl.sort.node.SortLeaf;
 
 import javax.inject.Inject;
 import javax.inject.Named;

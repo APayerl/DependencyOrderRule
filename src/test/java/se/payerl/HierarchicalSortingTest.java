@@ -2,6 +2,10 @@ package se.payerl;
 
 import org.apache.maven.model.Dependency;
 import org.junit.Test;
+import se.payerl.model.Scope;
+import se.payerl.sort.SortOrder;
+import se.payerl.sort.node.GroupNode;
+import se.payerl.sort.node.SortLeaf;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -43,7 +43,7 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
       - name: Build with Maven
         if: steps.version.outputs.new_tag
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml -Ppgp-sign
       - name: Publish to Maven Central
         if: steps.version.outputs.new_tag
         run: mvn deploy

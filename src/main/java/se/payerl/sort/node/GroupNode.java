@@ -1,6 +1,8 @@
-package se.payerl;
+package se.payerl.sort.node;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.sort.SortNode;
+import se.payerl.sort.SortOrder;
 
 import java.util.*;
 import java.util.stream.Collectors;

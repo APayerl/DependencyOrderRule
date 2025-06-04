@@ -1,4 +1,4 @@
-package se.payerl;
+package se.payerl.model;
 
 /**
  * Enum representing Maven dependency scopes.
@@ -49,6 +49,11 @@ public enum Scope {
         this.value = value;
     }
 
+    /**
+     * Returns the string representation of the scope.
+     *
+     * @return Scope value as string (e.g. "compile", "provided")
+     */
     public String getValue() {
         return value;
     }
@@ -90,4 +95,4 @@ public enum Scope {
     public String toString() {
         return value;
     }
-}
+} 
