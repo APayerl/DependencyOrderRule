@@ -6,7 +6,7 @@ and throws an exception if they are not in correct order.
 - [Prerequisites](#prerequisites)
 - [How to use](#how-to-use)
 - [Available SortOrders](#available-sortorders)
-- [Hierarchical sorting](#hierarchical-sorting)
+- [Group mode sorting](#group-mode-sorting)
 - [Examples](#examples)
 - [License](#license)
 
@@ -56,12 +56,12 @@ Configure the rule using the simple syntax:
   - Takes an `<inversed>` tag
   - If the inversed tag is set to true, alphabetical order will be reversed
 
-### Hierarchical sorting
+### Group mode sorting
 
-DependencyOrderRule supports hierarchical sorting where dependencies are first grouped according to the first rule, 
+DependencyOrderRule supports group mode sorting where dependencies are first grouped according to the first rule, 
 then remaining rules are applied within each group.
 
-To enable hierarchical sorting:
+To enable group mode sorting:
 - Add `<groupMode>true</groupMode>` element to the configuration
 - First SortOrder is used for grouping
 - Remaining SortOrders are applied within each group
@@ -126,7 +126,7 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
 </plugin>
 ```
 
-### Hierarchical sorting with multi-scope
+### Group mode sorting with multi-scope
 ```xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -141,7 +141,7 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
     </dependencies>
     <executions>
         <execution>
-            <id>enforce-hierarchical-order</id>
+            <id>enforce-group-mode-order</id>
             <goals>
                 <goal>enforce</goal>
             </goals>

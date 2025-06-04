@@ -10,9 +10,9 @@ This is a test project for testing the DependencyOrderRule Maven Enforcer Plugin
 - `pom-wrong.xml` - Wrong order according to AlphabeticalOrder (should fail)
 - `pom-correct.xml` - Correct order according to multiple rules (should succeed)
 
-### Hierarchical tests  
-- `pom-hierarchical.xml` - Hierarchical sorting with compile->test grouping (should succeed)
-- `pom-multi-scope.xml` - Multi-scope hierarchical sorting with compile->provided->test (should succeed)
+### Group mode tests  
+- `pom-hierarchical.xml` - Group mode sorting with compile->test grouping (should succeed)
+- `pom-multi-scope.xml` - Multi-scope group mode sorting with compile->provided->test (should succeed)
 - `pom-type-safe.xml` - Type-safe scope configuration with COMPILE->RUNTIME->PROVIDED->TEST (should succeed)
 
 ## How to test
@@ -37,12 +37,12 @@ mvn validate -f pom-simple.xml
 mvn validate -f pom-wrong.xml
 ```
 
-#### Hierarchical sorting with compile->test grouping (should succeed)
+#### Group mode sorting with compile->test grouping (should succeed)
 ```bash
 mvn validate -f pom-hierarchical.xml
 ```
 
-#### Multi-scope hierarchical sorting (should succeed)
+#### Multi-scope group mode sorting (should succeed)
 ```bash
 mvn validate -f pom-multi-scope.xml
 ```
@@ -67,17 +67,17 @@ The plugin should fail and show which dependencies are in wrong order:
 Dependency org.apache.commons:commons-lang3 must be before com.google.guava:guava
 ```
 
-### With hierarchical sorting (pom-hierarchical.xml)
+### With group mode sorting (pom-hierarchical.xml)
 The plugin should run without errors and show:
 ```
-[INFO] Hierarchical sorting - Grouping by: Checking for compile before test  
+[INFO] Group mode sorting - Grouping by: Checking for compile before test  
 [INFO] BUILD SUCCESS
 ```
 
-### With multi-scope hierarchical sorting (pom-multi-scope.xml)
+### With multi-scope group mode sorting (pom-multi-scope.xml)
 The plugin should run without errors and show:
 ```
-[INFO] Hierarchical sorting - Grouping by: Checking for compile before provided before test
+[INFO] Group mode sorting - Grouping by: Checking for compile before provided before test
 [INFO] BUILD SUCCESS
 ```
 
@@ -94,7 +94,7 @@ The test project uses version `1.0.0-SNAPSHOT` of DependencyOrderRule, which mea
 ### Tested features
 
 - **Simple sorting**: AlphabeticalOrder, ScopeOrder, OptionalOrder
-- **Hierarchical sorting**: Grouping with first rule, applying remaining rules within groups
+- **Group mode sorting**: Grouping with first rule, applying remaining rules within groups
 - **Multi-scope configuration**: ScopeOrder with multiple `<then>` tags
 - **Type-safe scopes**: Both lowercase and uppercase scope values
 - **Error handling**: Correct error messages for dependencies in wrong order 

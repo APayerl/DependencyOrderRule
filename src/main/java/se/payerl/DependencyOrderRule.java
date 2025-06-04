@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * &lt;dependencyManagement&gt; sections are sorted according to configured
  * sorting rules.
  * 
- * Supports both simple sorting with SortOrder and hierarchical sorting.
+ * Supports both simple sorting with SortOrder and group mode sorting.
  * 
  * Example of simple rules:
  * <pre>
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * &lt;/DependencyOrderRule&gt;
  * </pre>
  * 
- * Example of hierarchical sorting:
+ * Example of group mode sorting:
  * <pre>
  * &lt;DependencyOrderRule&gt;
  *   &lt;groupMode&gt;true&lt;/groupMode&gt;
@@ -66,8 +66,8 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     // Sort orders configuration
     private List<SortOrder> SortOrders;
     
-    // Flag for hierarchical sorting - set as XML element instead of attribute
-    private boolean hierarchical = false;
+    // Flag for group mode - set as XML element instead of attribute
+    private boolean groupMode = false;
 
     @Override
     public void execute() throws EnforcerRuleException {
@@ -106,10 +106,10 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         }
 
         if (SortOrders != null && !SortOrders.isEmpty()) {
-            getLog().info("Configured with " + SortOrders.size() + " sort rules, groupMode=" + hierarchical);
-            if (hierarchical) {
+            getLog().info("Configured with " + SortOrders.size() + " sort rules, groupMode=" + groupMode);
+            if (groupMode) {
                 getLog().info("Using group sorting mode");
-                return checkDependencyListWithHierarchicalSortOrders(dependencies);
+                return checkDependencyListWithGroupSortOrders(dependencies);
             } else {
                 getLog().info("Using simple sorting mode");
                 return checkDependencyListWithSortOrders(dependencies);
@@ -120,13 +120,13 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         }
     }
     
-    private List<String> checkDependencyListWithHierarchicalSortOrders(List<Dependency> dependencies) {
+    private List<String> checkDependencyListWithGroupSortOrders(List<Dependency> dependencies) {
         if (SortOrders.size() == 1) {
             // Only one rule, use normal sorting
             return checkDependencyListWithSortOrders(dependencies);
         }
         
-        // Build automatic hierarchical structure
+        // Build automatic group structure
         SortOrder groupingRule = SortOrders.get(0);
         getLog().info("Group sorting - Grouping by: " + groupingRule.getDescription());
         
@@ -176,7 +176,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     @Override
     public String toString() {
         if (SortOrders != null) {
-            String mode = hierarchical ? "group mode" : "simple";
+            String mode = groupMode ? "group mode" : "simple";
             return String.format("DependencyOrderRule[%s SortOrders=%s]", mode, listToString(SortOrders));
         } else {
             return "DependencyOrderRule[no rules configured]";
@@ -197,14 +197,14 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     }
     
     /**
-     * Sets group mode (user-friendly interface for hierarchical sorting).
+     * Sets group mode (user-friendly interface for group mode sorting).
      * In group mode, the first rule is used for grouping dependencies,
      * and remaining rules are applied within each group.
      * 
      * @param groupMode true for group sorting, false for simple sorting
      */
     public void setGroupMode(boolean groupMode) {
-        this.hierarchical = groupMode;
+        this.groupMode = groupMode;
     }
     
     /**
@@ -213,6 +213,6 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
      * @return true if group mode is enabled
      */
     public boolean isGroupMode() {
-        return hierarchical;
+        return groupMode;
     }
 }
