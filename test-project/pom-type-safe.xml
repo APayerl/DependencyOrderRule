@@ -95,20 +95,18 @@
                                 
                                 Ordning: compile -> runtime -> provided -> test
                                 -->
-                                <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
-                                    <hierarchical>true</hierarchical>
+                                <DependencyOrderRule>
                                     <SortOrders>
                                         <ScopeOrder>
-                                            <first>COMPILE</first>
-                                            <then>RUNTIME</then>
-                                            <then>PROVIDED</then>
-                                            <then>TEST</then>
+                                            <first>compile</first>
+                                            <then>provided</then>
+                                            <then>test</then>
                                         </ScopeOrder>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </dependencyOrderRule>
+                                </DependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

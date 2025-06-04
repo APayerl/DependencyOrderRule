@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * 
  * Example of simple rules:
  * <pre>
- * &lt;dependencyOrderRule implementation="se.payerl.DependencyOrderRule"&gt;
+ * &lt;DependencyOrderRule&gt;
  *   &lt;SortOrders&gt;
  *     &lt;AlphabeticalOrder&gt;
  *       &lt;inversed&gt;false&lt;/inversed&gt;
@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
  *       &lt;then&gt;test&lt;/then&gt;
  *     &lt;/ScopeOrder&gt;
  *   &lt;/SortOrders&gt;
- * &lt;/dependencyOrderRule&gt;
+ * &lt;/DependencyOrderRule&gt;
  * </pre>
  * 
  * Example of hierarchical sorting:
  * <pre>
- * &lt;dependencyOrderRule implementation="se.payerl.DependencyOrderRule"&gt;
- *   &lt;hierarchical&gt;true&lt;/hierarchical&gt;
+ * &lt;DependencyOrderRule&gt;
+ *   &lt;groupMode&gt;true&lt;/groupMode&gt;
  *   &lt;SortOrders&gt;
  *     &lt;ScopeOrder&gt;
  *       &lt;first&gt;compile&lt;/first&gt;
@@ -50,20 +50,20 @@ import java.util.stream.Collectors;
  *       &lt;inversed&gt;false&lt;/inversed&gt;
  *     &lt;/AlphabeticalOrder&gt;
  *   &lt;/SortOrders&gt;
- * &lt;/dependencyOrderRule&gt;
+ * &lt;/DependencyOrderRule&gt;
  * </pre>
  * 
- * In hierarchical mode:
+ * In group mode:
  * - First rule is used for grouping
  * - Remaining rules are applied within each group in sequence
  * - Supports multi-scope configuration with multiple &lt;then&gt; tags
  */
-@Named("dependencyOrderRule")
+@Named("DependencyOrderRule")
 public class DependencyOrderRule extends AbstractEnforcerRule {
     @Inject
     private MavenProject project;
 
-    // Simple sorting (backward compatibility)
+    // Sort orders configuration
     private List<SortOrder> SortOrders;
     
     // Flag for hierarchical sorting - set as XML element instead of attribute
@@ -106,9 +106,9 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         }
 
         if (SortOrders != null && !SortOrders.isEmpty()) {
-            getLog().info("Configured with " + SortOrders.size() + " sort rules, hierarchical=" + hierarchical);
+            getLog().info("Configured with " + SortOrders.size() + " sort rules, groupMode=" + hierarchical);
             if (hierarchical) {
-                getLog().info("Using hierarchical sorting mode");
+                getLog().info("Using group sorting mode");
                 return checkDependencyListWithHierarchicalSortOrders(dependencies);
             } else {
                 getLog().info("Using simple sorting mode");
@@ -128,7 +128,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
         
         // Build automatic hierarchical structure
         SortOrder groupingRule = SortOrders.get(0);
-        getLog().info("Hierarchical sorting - Grouping by: " + groupingRule.getDescription());
+        getLog().info("Group sorting - Grouping by: " + groupingRule.getDescription());
         
         // Create child rule from remaining rules
         SortNode childRule = createChildRuleFromSortOrders(SortOrders.subList(1, SortOrders.size()));
@@ -176,7 +176,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     @Override
     public String toString() {
         if (SortOrders != null) {
-            String mode = hierarchical ? "hierarchical" : "simple";
+            String mode = hierarchical ? "group mode" : "simple";
             return String.format("DependencyOrderRule[%s SortOrders=%s]", mode, listToString(SortOrders));
         } else {
             return "DependencyOrderRule[no rules configured]";
@@ -188,7 +188,7 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     }
     
     /**
-     * Sets SortOrders for simple sorting (backward compatibility).
+     * Sets SortOrders for the rule.
      * 
      * @param sortOrders List of SortOrder to use
      */
@@ -197,20 +197,22 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
     }
     
     /**
-     * Sets hierarchical mode.
+     * Sets group mode (user-friendly interface for hierarchical sorting).
+     * In group mode, the first rule is used for grouping dependencies,
+     * and remaining rules are applied within each group.
      * 
-     * @param hierarchical true for hierarchical sorting, false for simple sorting
+     * @param groupMode true for group sorting, false for simple sorting
      */
-    public void setHierarchical(boolean hierarchical) {
-        this.hierarchical = hierarchical;
+    public void setGroupMode(boolean groupMode) {
+        this.hierarchical = groupMode;
     }
     
     /**
-     * Returns if hierarchical mode is enabled.
+     * Returns if group mode is enabled.
      * 
-     * @return true if hierarchical mode is enabled
+     * @return true if group mode is enabled
      */
-    public boolean isHierarchical() {
+    public boolean isGroupMode() {
         return hierarchical;
     }
 }

@@ -71,24 +71,25 @@
                             <rules>
                                 <!-- 
                                 HIERARKISK SORTERING:
-                                - hierarchical="true" aktiverar hierarkisk mode
+                                - groupMode="true" aktiverar hierarkisk mode
                                 - Första regeln (ScopeOrder) grupperar dependencies efter scope
                                 - Andra regeln (AlphabeticalOrder) sorterar inom varje grupp
                                 
                                 Resultat: compile först (alfabetiskt), sedan test (alfabetiskt)
                                 -->
-                                <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
-                                    <hierarchical>true</hierarchical>
+                                <DependencyOrderRule>
+                                    <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
                                             <first>compile</first>
+                                            <then>provided</then>
                                             <then>test</then>
                                         </ScopeOrder>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </dependencyOrderRule>
+                                </DependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

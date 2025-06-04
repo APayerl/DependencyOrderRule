@@ -22,6 +22,22 @@ and throws an exception if they are not in correct order.
 
 If dependencies are not in correct order according to your SortOrder configuration, the build will fail with an EnforcerRuleException.
 
+## Configuration syntax
+
+Configure the rule using the simple syntax:
+
+```xml
+<rules>
+    <DependencyOrderRule>
+        <SortOrders>
+            <AlphabeticalOrder>
+                <inversed>false</inversed>
+            </AlphabeticalOrder>
+        </SortOrders>
+    </DependencyOrderRule>
+</rules>
+```
+
 ### Available SortOrders
 
 - **ScopeOrder**: Used to sort based on scope tags.
@@ -46,7 +62,7 @@ DependencyOrderRule supports hierarchical sorting where dependencies are first g
 then remaining rules are applied within each group.
 
 To enable hierarchical sorting:
-- Add `<hierarchical>true</hierarchical>` element to the configuration
+- Add `<groupMode>true</groupMode>` element to the configuration
 - First SortOrder is used for grouping
 - Remaining SortOrders are applied within each group
 
@@ -88,7 +104,7 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
             </goals>
             <configuration>
                 <rules>
-                    <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
+                    <DependencyOrderRule>
                         <SortOrders>
                             <ScopeOrder>
                                 <first>compile</first>
@@ -102,7 +118,7 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
                                 <inversed>false</inversed>
                             </AlphabeticalOrder>
                         </SortOrders>
-                    </dependencyOrderRule>
+                    </DependencyOrderRule>
                 </rules>
             </configuration>
         </execution>
@@ -131,8 +147,8 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
             </goals>
             <configuration>
                 <rules>
-                    <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
-                        <hierarchical>true</hierarchical>
+                    <DependencyOrderRule>
+                        <groupMode>true</groupMode>
                         <SortOrders>
                             <ScopeOrder>
                                 <first>compile</first>
@@ -143,7 +159,7 @@ It is also worth noting that multiple rules can be used simultaneously BUT the r
                                 <inversed>false</inversed>
                             </AlphabeticalOrder>
                         </SortOrders>
-                    </dependencyOrderRule>
+                    </DependencyOrderRule>
                 </rules>
             </configuration>
         </execution>

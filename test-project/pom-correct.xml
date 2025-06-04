@@ -57,17 +57,18 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
+                                <DependencyOrderRule>
+                                    <groupMode>true</groupMode>
                                     <SortOrders>
-                                        <AlphabeticalOrder>
-                                            <inversed>false</inversed>
-                                        </AlphabeticalOrder>
                                         <ScopeOrder>
                                             <first>compile</first>
                                             <then>test</then>
                                         </ScopeOrder>
+                                        <AlphabeticalOrder>
+                                            <inversed>false</inversed>
+                                        </AlphabeticalOrder>
                                     </SortOrders>
-                                </dependencyOrderRule>
+                                </DependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

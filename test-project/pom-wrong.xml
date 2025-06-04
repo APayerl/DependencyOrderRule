@@ -49,13 +49,13 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
+                                <DependencyOrderRule>
                                     <SortOrders>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </dependencyOrderRule>
+                                </DependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

@@ -86,14 +86,14 @@
                             <rules>
                                 <!-- 
                                 MULTI-SCOPE HIERARKISK SORTERING:
-                                - hierarchical="true" aktiverar hierarkisk mode
+                                - groupMode="true" aktiverar hierarkisk mode
                                 - Första regeln (ScopeOrder) med flera <then> taggar
                                 - Andra regeln (AlphabeticalOrder) sorterar inom varje grupp
                                 
                                 Resultat: compile -> provided -> test (alla alfabetiskt sorterade)
                                 -->
-                                <dependencyOrderRule implementation="se.payerl.DependencyOrderRule">
-                                    <hierarchical>true</hierarchical>
+                                <DependencyOrderRule>
+                                    <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
                                             <first>compile</first>
@@ -104,7 +104,7 @@
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </dependencyOrderRule>
+                                </DependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>
