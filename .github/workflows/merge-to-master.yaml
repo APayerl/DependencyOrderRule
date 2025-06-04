@@ -41,6 +41,8 @@ jobs:
       - name: Bump version in pom.xml
         if: steps.version.outputs.new_tag
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.new_tag }}
+      - name: Compile
+        run: mvn -B compile --file pom.xml -Ppgp-sign
       - name: Build with Maven
         if: steps.version.outputs.new_tag
         run: mvn -B package --file pom.xml -Ppgp-sign
