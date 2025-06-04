@@ -14,13 +14,10 @@ import java.util.stream.Collectors;
 
 /**
  * Maven Enforcer Plugin rule that checks the order of dependencies in pom.xml.
- * 
  * This rule checks that dependencies in both &lt;dependencies&gt; and
  * &lt;dependencyManagement&gt; sections are sorted according to configured
  * sorting rules.
- * 
  * Supports both simple sorting with SortOrder and group mode sorting.
- * 
  * Example of simple rules:
  * <pre>
  * &lt;DependencyOrderRule&gt;
@@ -185,34 +182,5 @@ public class DependencyOrderRule extends AbstractEnforcerRule {
 
     private String listToString(List<SortOrder> list) {
         return "[" + list.stream().map(SortOrder::toString).collect(Collectors.joining(",")) + "]";
-    }
-    
-    /**
-     * Sets SortOrders for the rule.
-     * 
-     * @param sortOrders List of SortOrder to use
-     */
-    public void setSortOrders(List<SortOrder> sortOrders) {
-        this.SortOrders = sortOrders;
-    }
-    
-    /**
-     * Sets group mode (user-friendly interface for group mode sorting).
-     * In group mode, the first rule is used for grouping dependencies,
-     * and remaining rules are applied within each group.
-     * 
-     * @param groupMode true for group sorting, false for simple sorting
-     */
-    public void setGroupMode(boolean groupMode) {
-        this.groupMode = groupMode;
-    }
-    
-    /**
-     * Returns if group mode is enabled.
-     * 
-     * @return true if group mode is enabled
-     */
-    public boolean isGroupMode() {
-        return groupMode;
     }
 }
