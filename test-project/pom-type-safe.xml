@@ -88,25 +88,20 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <!-- 
-                                TYPE-SAFE SCOPE ORDNING:
-                                Även om XML använder strings, konverteras de internt till 
-                                type-safe Scope enum för validering och felhantering.
-                                
-                                Ordning: compile -> runtime -> provided -> test
-                                -->
-                                <DependencyOrderRule>
+                                <dependencyOrderRule>
+                                    <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
-                                            <first>compile</first>
-                                            <then>provided</then>
-                                            <then>test</then>
+                                            <first>COMPILE</first>
+                                            <then>RUNTIME</then>
+                                            <then>PROVIDED</then>
+                                            <then>TEST</then>
                                         </ScopeOrder>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

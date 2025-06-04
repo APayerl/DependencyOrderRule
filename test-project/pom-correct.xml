@@ -57,7 +57,7 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <DependencyOrderRule>
+                                <dependencyOrderRule>
                                     <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
@@ -68,7 +68,7 @@
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

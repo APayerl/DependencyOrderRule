@@ -49,13 +49,13 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <DependencyOrderRule>
+                                <dependencyOrderRule>
                                     <SortOrders>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

@@ -92,7 +92,7 @@
                                 
                                 Resultat: compile -> provided -> test (alla alfabetiskt sorterade)
                                 -->
-                                <DependencyOrderRule>
+                                <dependencyOrderRule>
                                     <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
@@ -104,7 +104,7 @@
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

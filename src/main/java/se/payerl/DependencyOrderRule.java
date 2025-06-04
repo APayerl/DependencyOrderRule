@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * - Remaining rules are applied within each group in sequence
  * - Supports multi-scope configuration with multiple &lt;then&gt; tags
  */
-@Named("DependencyOrderRule")
+@Named("dependencyOrderRule")
 public class DependencyOrderRule extends AbstractEnforcerRule {
     @Inject
     private MavenProject project;

@@ -57,9 +57,7 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <!-- Bara regelnamnet! -->
-                                <DependencyOrderRule>
-                                    <groupMode>true</groupMode>
+                                <dependencyOrderRule>
                                     <SortOrders>
                                         <ScopeOrder>
                                             <first>compile</first>
@@ -69,7 +67,7 @@
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>

@@ -77,19 +77,18 @@
                                 
                                 Resultat: compile först (alfabetiskt), sedan test (alfabetiskt)
                                 -->
-                                <DependencyOrderRule>
+                                <dependencyOrderRule>
                                     <groupMode>true</groupMode>
                                     <SortOrders>
                                         <ScopeOrder>
                                             <first>compile</first>
-                                            <then>provided</then>
                                             <then>test</then>
                                         </ScopeOrder>
                                         <AlphabeticalOrder>
                                             <inversed>false</inversed>
                                         </AlphabeticalOrder>
                                     </SortOrders>
-                                </DependencyOrderRule>
+                                </dependencyOrderRule>
                             </rules>
                         </configuration>
                     </execution>
