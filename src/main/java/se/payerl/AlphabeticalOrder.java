@@ -1,13 +1,43 @@
 package se.payerl;
 
 import org.apache.maven.model.Dependency;
+import se.payerl.sort.SortOrder;
 
-import java.util.List;
+import java.util.Optional;
 
-public class AlphabeticalOrder extends SortOrder<AlphabeticalOrder> {
-    boolean inversed = false;
+/**
+ * Sorting order that checks that dependencies are sorted alphabetically
+ * based on groupId:artifactId.
+ * <p>
+ * Can be configured to sort in reverse order by setting inversed to true.
+ * </p>
+ */
+public class AlphabeticalOrder extends SortOrder {
+    private boolean inversed = false;
 
+    /**
+     * Creates a new AlphabeticalOrder with default settings.
+     * By default dependencies are sorted in normal alphabetical order.
+     */
     public AlphabeticalOrder() { }
+
+    /**
+     * Specifies if the sorting should be reversed.
+     *
+     * @param inversed true for reverse alphabetical order, false for normal order
+     */
+    public void setInversed(boolean inversed) {
+        this.inversed = inversed;
+    }
+
+    /**
+     * Returns if the sorting is reversed.
+     *
+     * @return true if the sorting is reversed, otherwise false
+     */
+    public boolean isInversed() {
+        return inversed;
+    }
 
     @Override
     public String toString() {
@@ -15,32 +45,46 @@ public class AlphabeticalOrder extends SortOrder<AlphabeticalOrder> {
     }
 
     @Override
-    String getFilter(Dependency dep) {
-        return dep.getGroupId() + ":" + dep.getArtifactId();
+    public String extractSortKey(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
+        return dependency.getGroupId() + ":" + dependency.getArtifactId();
     }
 
     @Override
-    String depToStr(Dependency dep) {
-        return getFilter(dep);
+    public String formatDependencyForError(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
+        return extractSortKey(dependency);
     }
 
     @Override
-    String getJob() {
+    public String getDescription() {
         return "Checking for" + (inversed ? " inversed " : " ") + "alphabetical order";
     }
 
     @Override
-    void compareTo(Dependency prevDep, Dependency currentDep, List<String> errors) {
-        String prev = prevDep.getGroupId() + ":" + prevDep.getArtifactId();
-        String curr = currentDep.getGroupId() + ":" + currentDep.getArtifactId();
-        if(!inversed && prev.compareToIgnoreCase(curr) > 0 ||
-                inversed && prev.compareToIgnoreCase(curr) < 0) {
-            errors.add("Dependency " + curr + " must be before " + prev);
+    public Optional<String> validateOrder(Dependency previousDependency, Dependency currentDependency) {
+        requireNonNull(previousDependency, "previousDependency");
+        requireNonNull(currentDependency, "currentDependency");
+        
+        String previousKey = extractSortKey(previousDependency);
+        String currentKey = extractSortKey(currentDependency);
+        
+        boolean isWrongOrder = (!inversed && previousKey.compareToIgnoreCase(currentKey) > 0) ||
+                              (inversed && previousKey.compareToIgnoreCase(currentKey) < 0);
+        
+        if (isWrongOrder) {
+            String errorMessage = String.format("Dependency %s must be before %s", 
+                                               formatDependencyForError(currentDependency),
+                                               formatDependencyForError(previousDependency));
+            return Optional.of(errorMessage);
         }
+        
+        return Optional.empty();
     }
 
     @Override
-    boolean isDependencyApplicable(Dependency dep) {
+    public boolean isApplicable(Dependency dependency) {
+        requireNonNull(dependency, "dependency");
         return true;
     }
 }

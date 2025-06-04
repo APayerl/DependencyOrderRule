@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>se.payerl.test</groupId>
+    <artifactId>type-safe-scope-example</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <!-- 
+    Type-safe scope configuration exempel:
+    
+    XML använder fortfarande strings som konverteras automatiskt 
+    till type-safe Scope enum internt. Detta ger:
+    
+    ✅ Type safety - felstavningar konverteras till COMPILE default
+    ✅ Bakåtkompatibilitet - gamla konfigurationer fungerar
+    ✅ IDE support - autocomplete för scope-värden i kod
+    ✅ Dokumentation - alla tillgängliga scopes finns i Scope enum
+    
+    Tillgängliga scopes:
+    - compile (default)
+    - provided  
+    - runtime
+    - test
+    - system
+    - import
+    -->
+    <dependencies>
+        <!-- Compile dependencies -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+            <!-- scope "compile" är default, behövs inte specificeras -->
+        </dependency>
+        
+        <!-- Runtime dependencies -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>se.payerl</groupId>
+                        <artifactId>DependencyOrderRule</artifactId>
+                        <version>1.0.0</version>
+                        <scope>system</scope>
+                        <systemPath>${basedir}/../../../target/DependencyOrderRule-1.0.0.jar</systemPath>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>enforce-scope-order</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <dependencyOrderRule>
+                                    <groupMode>true</groupMode>
+                                    <SortOrders>
+                                        <ScopeOrder>
+                                            <first>COMPILE</first>
+                                            <then>RUNTIME</then>
+                                            <then>PROVIDED</then>
+                                            <then>TEST</then>
+                                        </ScopeOrder>
+                                        <AlphabeticalOrder>
+                                            <inversed>false</inversed>
+                                        </AlphabeticalOrder>
+                                    </SortOrders>
+                                </dependencyOrderRule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project> 

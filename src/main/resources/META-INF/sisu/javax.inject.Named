@@ -1,0 +1,4 @@
+dependencyOrderRule=se.payerl.DependencyOrderRule
+AlphabeticalOrder=se.payerl.AlphabeticalOrder
+ScopeOrder=se.payerl.ScopeOrder
+OptionalOrder=se.payerl.OptionalOrder
