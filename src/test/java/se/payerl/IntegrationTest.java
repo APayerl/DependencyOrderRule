@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -109,14 +110,62 @@ public class IntegrationTest {
             throw new RuntimeException("Kunde inte hitta " + pomFile + " i " + testResourcesDirectory.getPath());
         }
         
-        Files.copy(sourcePom, targetPom, StandardCopyOption.REPLACE_EXISTING);
+        // Verifiera att plugin JAR-filen finns
+        File pluginJar = new File("target/DependencyOrderRule-1.0.0.jar");
+        if (!pluginJar.exists()) {
+            throw new RuntimeException("Plugin JAR-fil saknas: " + pluginJar.getAbsolutePath() + 
+                                     ". Kör 'mvn clean install -DskipTests' först.");
+        }
+        System.out.println("Plugin JAR-fil hittad: " + pluginJar.getAbsolutePath());
+        
+        // Läs pom-filen och ersätt relativ systemPath med absolut sökväg
+        String pomContent = new String(Files.readAllBytes(sourcePom));
+        String absolutePluginPath = pluginJar.getAbsolutePath().replace("\\", "/"); // Normalisera path separators för XML
+        pomContent = pomContent.replace("${basedir}/../../../target/DependencyOrderRule-1.0.0.jar", absolutePluginPath);
+        
+        // Skriv modifierad pom till temporär katalog
+        Files.write(targetPom, pomContent.getBytes());
         
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.directory(tempTestDirectory);
         
+        // Sätt JAVA_HOME explicit för Maven-processen
+        String javaHome = System.getProperty("java.home");
+        
+        // Fallback: vissa JDK-installationer kräver att vi går upp en nivå från java.home
+        if (javaHome != null && javaHome.endsWith("jre")) {
+            File parentDir = new File(javaHome).getParentFile();
+            if (parentDir != null && parentDir.exists()) {
+                File javacFile = new File(parentDir, "bin" + File.separator + (isWindows() ? "javac.exe" : "javac"));
+                if (javacFile.exists()) {
+                    javaHome = parentDir.getAbsolutePath();
+                    System.out.println("Använder JDK-katalog istället för JRE: " + javaHome);
+                }
+            }
+        }
+        
+        if (javaHome != null) {
+            processBuilder.environment().put("JAVA_HOME", javaHome);
+            System.out.println("Sätter JAVA_HOME för Maven-process: " + javaHome);
+        } else {
+            System.out.println("VARNING: Kunde inte bestämma JAVA_HOME");
+        }
+        
+        // Sätt även PATH för att säkerställa att Maven hittar Java
+        String systemPath = System.getenv("PATH");
+        if (systemPath != null) {
+            // Lägg till Java bin-katalog i PATH om den inte redan finns
+            String javaBin = javaHome + File.separator + "bin";
+            if (!systemPath.contains(javaBin)) {
+                String separator = isWindows() ? ";" : ":";
+                systemPath = javaBin + separator + systemPath;
+                processBuilder.environment().put("PATH", systemPath);
+                System.out.println("Uppdaterar PATH för Maven-process");
+            }
+        }
+        
         // Konfiguration för olika operativsystem
         String mvnCommand = isWindows() ? "mvn.cmd" : "mvn";
-        // Använd validate för att köra den konfigurerade execution
         processBuilder.command(mvnCommand, "validate");
         
         processBuilder.redirectErrorStream(true);
@@ -132,6 +181,13 @@ public class IntegrationTest {
         String output = readProcessOutput(process);
         int exitCode = process.exitValue();
         
+        // Debug-utskrift av Maven output vid fel
+        if (exitCode != 0) {
+            System.out.println("Maven validate misslyckades för " + pomFile + ":");
+            System.out.println("Exit code: " + exitCode);
+            System.out.println("Output: " + output);
+        }
+        
         return new MavenResult(exitCode == 0, output, exitCode);
     }
     
@@ -140,11 +196,12 @@ public class IntegrationTest {
      */
     private String readProcessOutput(Process process) throws IOException {
         StringBuilder output = new StringBuilder();
-        byte[] buffer = new byte[1024];
-        int bytesRead;
         
-        while ((bytesRead = process.getInputStream().read(buffer)) != -1) {
-            output.append(new String(buffer, 0, bytesRead));
+        // Använd Scanner för att läsa output på ett robust sätt
+        try (Scanner scanner = new Scanner(process.getInputStream())) {
+            while (scanner.hasNextLine()) {
+                output.append(scanner.nextLine()).append(System.lineSeparator());
+            }
         }
         
         return output.toString();
