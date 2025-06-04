@@ -95,4 +95,4 @@ public enum Scope {
     public String toString() {
         return value;
     }
-} 
+}

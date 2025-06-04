@@ -6,6 +6,7 @@
 
     <groupId>se.payerl</groupId>
     <artifactId>DependencyOrderRule</artifactId>
+    <name>DependencyOrderRule</name>
     <packaging>jar</packaging>
     <version>1.0.0</version>
 
